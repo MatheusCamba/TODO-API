@@ -2,6 +2,7 @@ import { request } from "express";
 import { database } from "../infra/database.js";
 import UsuariosModel from "../models/Usuarios.js";
 import Validacoes from "../services/Validacoes.js";
+import Utils from "../utils/utils.js";
 
 //VERSAO EM CLASS
 export class Usuarios{
@@ -28,6 +29,20 @@ export class Usuarios{
             } else{
                 res.status(400).json({erro: "Não existe item com o id fornecido"})
             }
+        })
+        app.get('/usuarios/email/:email', (req, res)=>{
+            const resposta = Utils.verificaEmail(database, req.params.email);
+            res.status(200).json(resposta);
+        })
+        app.delete('/usuarios/email/:email', (req, res)=>{
+            const resposta = Utils.deletaEmail(database, req.params.email);
+            res.status(200).json(resposta);
+        })
+        app.delete('/usuarios/:id', (req, res)=>{
+            console.log(database.length)
+            const resposta = Utils.deletaPorId(database, req.params.id);
+            res.status(200).json(resposta)
+            console.log(database.length)
         })
     }
 }
