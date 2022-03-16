@@ -1,7 +1,7 @@
-import { request } from "express";
-import { database } from "../infra/database.js";
+import DatabaseMetodos from "../infra/DatabaseMetodos.js";
 import TarefasModel from "../models/tarefas.js";
 import Validacoes from "../services/Validacoes.js";
+import Utils from "../utils/utils.js";
 
 export class Tarefas {
     static tarefas(app){
@@ -21,6 +21,10 @@ export class Tarefas {
             }else{
                 res.status(400).json({erro:"Não existe item com o id fornecido"})
             }
+        })
+        app.put('/tarefas/:id', (req, res)=>{
+            const att = Utils.atualizaPorId(database, req.params.id, req.params.body)
+            res.status(200).json(att)
         })
     }
 }

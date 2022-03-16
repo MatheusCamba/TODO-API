@@ -1,14 +1,16 @@
-import { request } from "express";
-import { database } from "../infra/database.js";
+import DatabaseMetodos from "../DAO/DatabaseMetodos.js";
 import UsuariosModel from "../models/Usuarios.js";
 import Validacoes from "../services/Validacoes.js";
 import Utils from "../utils/utils.js";
+
+
 
 //VERSAO EM CLASS
 export class Usuarios{
     static usuarios(app){
         app.get('/usuarios', (req, res)=>{
             res.status(200).json(database)
+            console.log(database)
         })
         app.post('/usuarios', (req, res)=>{
             const id = parseInt(req.body.id) //passar para number, ja q a validação está para number
@@ -42,7 +44,12 @@ export class Usuarios{
             console.log(database.length)
             const resposta = Utils.deletaPorId(database, req.params.id);
             res.status(200).json(resposta)
-            console.log(database.length)
+            // console.log(database.length)
+        })
+        app.put('/usuarios/:id', (req, res)=>{
+            const novoItemAtualizado = new UsuariosModel(req.body.id, req.body.nome, req.body.sobrenome, req.body.email)
+            const atualiza = Utils.atualizaPorId(database, req.params.id, novoItemAtualizado)
+            res.status(200).json(atualiza)
         })
     }
 }
